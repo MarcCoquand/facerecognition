@@ -1,6 +1,6 @@
 import sys
 from Enum import Enum
-from perceptron import Perceptron
+from Perceptron import Perceptron
 from Tutor import Tutor
 from Examiner import Examiner
 
