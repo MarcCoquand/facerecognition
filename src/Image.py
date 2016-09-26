@@ -5,3 +5,7 @@ class Image:
 
     def __init__(self):
         return
+    
+    def rotate(degrees):
+        # Rotation matrix is m = [cos(theta) -sin(theta); sin(theta) cos(theta)]
+        return 
