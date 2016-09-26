@@ -1,11 +1,7 @@
-from time import sleep
-import math
-import utils
 
+class Perceptron:
+    """ Perceptron represents a perceptron object that is
+        used to fire based """
 
-class HighControl:
-    """ Highcontrol represents a planner for the tracker robot over on MRDS
-            Attributes:"""
-
-    def init(this):
+    def __init__(self):
         return
