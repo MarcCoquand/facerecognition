@@ -23,7 +23,7 @@ def main():
     perceptrons = (happy, sad, mischievous, mad)
 
     # use our tutor to train our perceptrons on a training set
-    tutor = Tutor(perceptrons)
+    tutor = Tutor(perceptrons, [])
     tutor.train()
 
     # examine our perceptrons
