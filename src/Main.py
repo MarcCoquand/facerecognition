@@ -13,8 +13,10 @@ def parse_facit(facit_file):
     facit = open(facit_file,'r')
     facits = []
     for line in facit:
-        if re.search('Image',line) != None:
-            return
+        if re.search('Image',line) is not None:
+            answer = [int(s) for s in re.findall(r'\b\d+\b',line)]
+            facits.append(answer)
+
 
 
 def parse_img_file(image_file):
@@ -22,7 +24,7 @@ def parse_img_file(image_file):
     images = []  
     img_size = 0
     for line in image:
-        if re.search('Image',line) != None:
+        if re.search('Image',line) is not None:
             for line2 in image:
                 if len(line2) != 1:
                     images[img_size].append(line2)
