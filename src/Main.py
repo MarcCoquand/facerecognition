@@ -50,7 +50,7 @@ def main():
     perceptrons = (happy, sad, mischievous, mad)
 
     #Create image list and set answers
-    img_list = Image(parse_img_file(sys.argv[1]))
+    img_list = parse_img_file(sys.argv[1])
     ans_list = parse_ans(sys.argv[2])
 
     #Link image and answer

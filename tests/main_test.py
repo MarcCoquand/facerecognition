@@ -15,6 +15,6 @@ class MainTest(unittest.TestCase):
 
     def test_parse_facit(self):
         ans_list = parse_facit(TRAINING_FILE_ANS)
-        self.assertNotEquals(len(img_list), 0)
+        self.assertNotEquals(len(ans_list), 0)
         self.assertEquals(ans_list[0],2)
         self.assertEquals(ans_list[12],3)
