@@ -8,6 +8,9 @@ class Image:
             img_arr = img[i].split(' ')
         self.img.append(img_arr)
     
+    def get_img(self):
+        return self.img
+
     def set_ans(self,ans):
         self.ans = ans
 
