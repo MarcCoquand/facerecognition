@@ -16,9 +16,10 @@ class Image:
         """Get image as 2d array""" 
         return self.img
 
-    def set_ans(self,ans):
+    def set_ans(self, ans):
         """Answer should be an enum."""
         self.ans = ans
+        return self
 
     def get_ans(self):
         """Get answer as enum"""
