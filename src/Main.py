@@ -11,14 +11,14 @@ EXPECTED_ARGS = 3
 Types = Enum(["HAPPY", "SAD", "MISCHIEVOUS", "MAD"])
 
 
-def parse_facit(facit_file):
-    facit = open(facit_file, 'r')
-    facits = []
-    for line in facit:
+def parse_ans(ans_file):
+    ans = open(ans_file, 'r')
+    answers = []
+    for line in ans:
         if re.search('Image', line) is not None:
             answer = [int(s) for s in re.findall(r'\b\d+\b', line)]
-            facits.append(answer)
-    return facits
+            answers.append(answer[0])
+    return answers
 
 
 def parse_img_file(image_file):
@@ -48,6 +48,14 @@ def main():
     mischievous = Perceptron(Types.MISCHIEVOUS)
     mad = Perceptron(Types.MAD)
     perceptrons = (happy, sad, mischievous, mad)
+
+    #Create image list and set answers
+    img_list = Image(parse_img_file(sys.argv[1]))
+    ans_list = parse_ans(sys.argv[2])
+
+    #Link image and answer
+    for i in range(len(img_list)):
+        img_list[i].set_ans(ans_list[i])
 
     # use our tutor to train our perceptrons on a training set
     tutor = Tutor(perceptrons, [])
