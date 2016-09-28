@@ -9,12 +9,15 @@ class Image:
         self.img.append(img_arr)
     
     def get_img(self):
+        """Get image as 2d array""" 
         return self.img
 
     def set_ans(self,ans):
+        """Answer should be an enum."""
         self.ans = ans
 
     def get_ans(self):
+        """Get answer as enum"""
         return self.ans
 
     def rotate(degrees):
