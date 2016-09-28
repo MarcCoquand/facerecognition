@@ -49,16 +49,15 @@ def main():
     mad = Perceptron(Types.MAD)
     perceptrons = (happy, sad, mischievous, mad)
 
-    #Create image list and set answers
+    # Create image list and set answers
     img_list = parse_img_file(sys.argv[1])
     ans_list = parse_ans(sys.argv[2])
 
-    #Link image and answer
-    for i in range(len(img_list)):
-        img_list[i].set_ans(ans_list[i])
+    # Link image and answer
+    images = map(lambda ans: img_list.pop(0).set_ans(ans), ans_list)
 
     # use our tutor to train our perceptrons on a training set
-    tutor = Tutor(perceptrons, [])
+    tutor = Tutor(perceptrons, images)
     tutor.train()
 
     # examine our perceptrons

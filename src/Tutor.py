@@ -8,8 +8,8 @@ class Tutor:
 
     def train(self):
         for perceptron in self.perceptrons:
-            for i in range(len(self.images)):
-                print perceptron.process(self.images)
+            for i in range(1):
+                print perceptron.process(self.images[i])
 
     def get_trained_perceptrons(self):
         return self.perceptrons

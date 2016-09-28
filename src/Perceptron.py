@@ -14,7 +14,7 @@ class Perceptron:
         self.threshold = random.random()
 
     def process(self, img):
-        m1 = mmult(img, self.bias)
+        m1 = mmult(img.get_img(), self.bias)
         return msum(m1)
 
     def update(self, new_bias):
