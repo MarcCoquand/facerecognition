@@ -4,33 +4,37 @@ from Enum import Enum
 from Perceptron import Perceptron
 from Tutor import Tutor
 from Examiner import Examiner
+from Image import Image
 
 # Program arguments: training-set, answer-set, examination-set (from spec)
 EXPECTED_ARGS = 3
 Types = Enum(["HAPPY", "SAD", "MISCHIEVOUS", "MAD"])
 
+
 def parse_facit(facit_file):
-    facit = open(facit_file,'r')
+    facit = open(facit_file, 'r')
     facits = []
     for line in facit:
-        if re.search('Image',line) is not None:
-            answer = [int(s) for s in re.findall(r'\b\d+\b',line)]
+        if re.search('Image', line) is not None:
+            answer = [int(s) for s in re.findall(r'\b\d+\b', line)]
             facits.append(answer)
-
+    return facits
 
 
 def parse_img_file(image_file):
-    image = open(image_file,'r')
-    images = []  
-    img_size = 0
+    image = open(image_file, 'r')
+    images = []
     for line in image:
-        if re.search('Image',line) is not None:
+        if re.search('Image', line) is not None:
+            img_gen = []
             for line2 in image:
                 if len(line2) != 1:
-                    images[img_size].append(line2)
+                    img_gen.append(line2)
                 else:
+                    images.append(Image(img_gen))
                     break
-            img_size += 1
+    return images
+
 
 def main():
     # Since program name is provided as additional first argument

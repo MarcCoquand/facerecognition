@@ -7,10 +7,8 @@ class Tutor:
         self.images = images
 
     def train(self):
-        # Go through all the images
-        for i in range(len(self.images)):
-            # Let all the perceptrons analyze every image
-            for perceptron in self.perceptrons:
+        for perceptron in self.perceptrons:
+            for i in range(len(self.images)):
                 print perceptron.process(self.images)
 
     def get_trained_perceptrons(self):
