@@ -1,3 +1,4 @@
+import itertools
 
 def mmult(m, c):
     """
@@ -13,3 +14,11 @@ def msum(m):
         msum returns the sum of every element in the matrix
     """
     return sum(map(sum, m))
+
+
+def ldot(l1, l2):
+    return map(lambda tup: tup[0] * tup[1], zip(l1, l2))
+
+
+def flatten(lst):
+    return list(itertools.chain.from_iterable(lst))

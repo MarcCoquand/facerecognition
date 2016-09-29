@@ -4,14 +4,9 @@ class Image:
         interactions with images """
 
     def __init__(self, img):
-        self.img = []
-        for i in range(len(img)):
-            img_arr = img[i].rstrip().split(' ')
-            for j in range(len(img_arr)):
-                img_arr[j] = int(img_arr[j])
-            self.img.append(img_arr)
-        return
-    
+        self.img = img
+        self.ans = None
+
     def get_img(self):
         """Get image as 2d array""" 
         return self.img
