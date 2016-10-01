@@ -2,42 +2,57 @@ import random
 import math
 from Utils import *
 
-TYPES = {"HAPPY": 1, "SAD": 2, "MISCHIEVOUS": 3, "MAD": 4}
-
 
 class Perceptron:
     """
-        Perceptron represents a perceptron object that is
-        used to fire based
+        Perceptron
     """
 
     def __init__(self, percept_type):
-        self.percept_type = percept_type
+        self.TYPES = {"HAPPY": 1, "SAD": 2, "MISCHIEVOUS": 3, "MAD": 4}
         self.bias = random.random()
-        self.weights = self._generate_weights(19, 19, 19)
-        self.type_id = TYPES[percept_type]
+        self.weights = self._generate_weights(400)
+        self.type_id = self.TYPES[percept_type]
 
     def process(self, img):
-        l1 = ldot(flatten(img.get_img()), self.weights)
-        return self.act(sum(l1))
+        """
+        Uses the formula sum(w[i], x[i]) from lecture notes to process an image
+        :return: summed weight of inputs
+        """
+        l1 = apply(float.__mul__, flatten(img.get_img()), self.weights)
+        return self._act(sum(l1))
 
-    def act(self, val):
+    def _act(self, val):
+        """
+        Computes the activation for the perceptron based on the sum of the
+        weighted input
+        :param val: summed weight in input
+        :return: activation of the perceptron
+        """
         return 1 / (1 + math.exp(-val))
 
     def update_weight(self, dw):
-        self.weights = ldot(flatten(dw), self.weights)
-
-    def get_type(self):
-        return self.percept_type
+        """
+        adds the provided delta error for the last iteration to each
+        value in the internal weight matrix according to lecture notes
+        :return: None
+        """
+        self.weights = apply(float.__add__, flatten(dw), self.weights)
 
     def get_type_id(self):
+        """
+        Returns the type id for this perceptron. Consult the type
+        type attribute for explanation of the meaning of the returned
+        value.
+        :return: type id as an integer [1, 4]
+        """
         return self.type_id
 
-    def _generate_weights(self, rows, cols, tot):
-        if rows == 0 and cols == 0:
-            return [random.random()]
-
-        if cols == 0:
-            return self._generate_weights(rows-1, tot, tot) + [random.random()]
-
-        return self._generate_weights(rows, cols-1, tot) + [random.random()]
+    def _generate_weights(self, acc):
+        """
+        Returns a list of the specified length containing pseudo
+        random values in interval [0.0, 1.0)
+        :param acc: length of the list to generate
+        :return: list of pseudo random floats
+        """
+        return [random.random()] if acc == 1 else self._generate_weights(acc-1) + [random.random()]

@@ -10,12 +10,13 @@ from Image import Image
 # Program arguments: training-set, answer-set, examination-set (from spec)
 EXPECTED_ARGS = 3
 Types = Enum(["HAPPY", "SAD", "MISCHIEVOUS", "MAD"])
+LEARNING_RATE = 0.001
 
 
 def parse_ans(ans_file):
     """
-     Opens the provided answer file and extracts the answers which are returned
-     as a list of integers.
+     Opens the provided answer file and extracts the answers which are
+     returned as a list of integers.
     :param ans_file: path to answer file
     :return: list of integers
     """
@@ -24,6 +25,7 @@ def parse_ans(ans_file):
 
 
 def parse_img_file(image_file):
+    # TODO: Implement without loops
     image = open(image_file, 'r')
     images = []
     for line in image:
@@ -49,7 +51,7 @@ def format_img_row(img):
     :param img: image pixel row
     :return: list of integers
     """
-    return map(lambda l: map(lambda i: (float(i)/100), l), map(lambda i: i.rstrip().split(' '), img))
+    return map(lambda l: map(lambda i: (float(i)/31), l), map(lambda i: i.rstrip().split(' '), img))
 
 
 def get_answer(line):
@@ -62,13 +64,21 @@ def get_answer(line):
     return map(lambda s: int(s), re.findall(r'\b\d+\b', line))
 
 
-def main():
+def validate_arguments():
+    """
+    makes sure that the user provided the right amount of arguments to the
+    program, else: fail gracefully. NON PURE FUNCTION!
+    :return:
+    """
     # Since program name is provided as additional first argument
     if len(sys.argv) < EXPECTED_ARGS + 1:
-        print "This program expects exactly %d args. %d was provided" % (EXPECTED_ARGS, len(sys.argv) - 1)
+        print "This program expects exactly %d args. %d was provided" % \
+              (EXPECTED_ARGS, len(sys.argv) - 1)
         sys.exit(0)
 
-    # Define our different perceptrons and put in a tuple
+
+def main():
+    validate_arguments()
     perceptrons = (Perceptron(Types.HAPPY), Perceptron(Types.SAD),
                    Perceptron(Types.MISCHIEVOUS), Perceptron(Types.MAD))
 
@@ -78,11 +88,13 @@ def main():
     # Link image and answer
     images = map(lambda ans: img_list.pop(0).set_ans(ans), ans_list)
 
-    # use our tutor to train our perceptrons on a training set
-    tutor = Tutor(perceptrons, images).train()
+    tutor = Tutor(perceptrons, images, LEARNING_RATE)
 
-    # examine our perceptrons
-    Examiner(tutor.get_trained_perceptrons())
+    # TODO: This should be moved as a MSE computation into tutor
+    for i in range(100):
+        tutor.train()
+
+    Examiner(tutor.get_perceptrons()).examine()
 
 if __name__ == "__main__":
     main()

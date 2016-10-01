@@ -19,5 +19,11 @@ class UtilsTest(unittest.TestCase):
         self.assertEquals(ldot(l1, l1), l2)
 
     def test_flatten(self):
-        l1 = [[1], [2], [3, 4], [5], [6], [7]]
+        l1 = [[1], [2], [3, [4]], [[[5], [6]], [7]]]
         self.assertEquals(flatten(l1), [1, 2, 3, 4, 5, 6, 7])
+
+    def test_apply(self):
+        l1 = [1, 2, 3, 4]
+        l2 = [1, 4, 9, 16]
+        add = int.__add__
+        self.assertEquals(apply(add, l1, l2), [2, 6, 12, 20])
