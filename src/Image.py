@@ -24,6 +24,8 @@ class Image:
     def set_id(self, id):
         self.id = "Image " + str(id)
 
+    def get_id(self):
+        return self.id
 
     def rotate(degrees):
         # TODO: IMPLEMENT

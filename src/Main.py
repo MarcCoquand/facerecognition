@@ -87,6 +87,7 @@ def main():
 
     img_list = parse_img_file(sys.argv[1])
     ans_list = parse_ans(sys.argv[2])
+    test_set = parse_img_file(sys.argv[3])
 
     # Link image and answer
     images = map(lambda ans: img_list.pop(0).set_ans(ans), ans_list)
@@ -94,7 +95,7 @@ def main():
     tutor = Tutor(perceptrons, images, LEARNING_RATE, THRESHOLD)
     tutor.train()
 
-    Examiner(tutor.get_perceptrons()).examine()
+    Examiner(tutor.get_perceptrons(), test_set).examine()
 
 if __name__ == "__main__":
     main()
