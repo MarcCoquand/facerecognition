@@ -5,6 +5,7 @@ class Image:
 
     def __init__(self, img):
         self.img = img
+        self.id = None
         self.ans = None
 
     def get_img(self):
@@ -19,6 +20,10 @@ class Image:
     def get_ans(self):
         """Get answer as enum"""
         return self.ans
+
+    def set_id(self, id):
+        self.id = "Image " + str(id)
+
 
     def rotate(degrees):
         # TODO: IMPLEMENT

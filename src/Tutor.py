@@ -1,19 +1,24 @@
+import math
 from Utils import mmult
 
 
 class Tutor:
     """ Tutor """
 
-    def __init__(self, perceptrons, images, learning_rate):
+    def __init__(self, perceptrons, images, learning_rate, threshold):
         self.perceptrons = perceptrons
         self.images = images
         self.learning_rate = learning_rate
+        self.threshold = threshold
 
     def train(self):
         # TODO: Implement without loops
-        for image in self.images:
-            for perceptron in self.perceptrons:
-                self._expose(image, perceptron)
+        err_list = []
+        while not self._accurate(err_list):
+            err_list = []
+            for image in self.images:
+                for perceptron in self.perceptrons:
+                    err_list.append(self._expose(image, perceptron))
         return self
 
     def get_perceptrons(self):
@@ -28,11 +33,14 @@ class Tutor:
 
     def _expose(self, image, perceptron):
         act = perceptron.process(image)
-        dw = self._delta_weight(image, self._desired_out(image, perceptron), act)
+        out = self._desired_out(image, perceptron)
+        err = self._error(out, act)
+        dw = self._delta_weight(image, err)
         perceptron.update_weight(dw)
-        print perceptron.get_type_id(), act, image.get_ans()
+        # print perceptron.get_type_id(), act, image.get_ans()
+        return err
 
-    def _delta_weight(self, inp, out, act):
+    def _delta_weight(self, inp, err):
         """
         Uses the formula (error * learning rate * input) from lecture notes
         to produce the delta error for the activation of the perceptron
@@ -42,7 +50,16 @@ class Tutor:
         :param act: the activation of the perceptron
         :return:
         """
-        return mmult(inp.get_img(), self.learning_rate * (out - act))
+        return mmult(inp.get_img(), self.learning_rate * err)
+
+    def _error(self, out, act):
+        return out - act
+
+    def _accurate(self, err_list):
+        if not err_list: return False
+        mse = (sum(map(lambda x: x**2, err_list)))/2
+        print mse
+        return mse < self.threshold
 
     def _desired_out(self, img, percept):
         """

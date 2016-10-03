@@ -11,6 +11,7 @@ from Image import Image
 EXPECTED_ARGS = 3
 Types = Enum(["HAPPY", "SAD", "MISCHIEVOUS", "MAD"])
 LEARNING_RATE = 0.001
+THRESHOLD = 30
 
 
 def parse_ans(ans_file):
@@ -35,7 +36,9 @@ def parse_img_file(image_file):
                 if len(line2) != 1:
                     img_gen.append(line2)
                 else:
-                    images.append(Image(format_img_row(img_gen)))
+                    img_tmp = Image(format_img_row(img_gen))
+                    img_tmp.set_id(len(images) + 1)
+                    images.append(img_tmp)
                     break
     return images
 
@@ -88,11 +91,8 @@ def main():
     # Link image and answer
     images = map(lambda ans: img_list.pop(0).set_ans(ans), ans_list)
 
-    tutor = Tutor(perceptrons, images, LEARNING_RATE)
-
-    # TODO: This should be moved as a MSE computation into tutor
-    for i in range(100):
-        tutor.train()
+    tutor = Tutor(perceptrons, images, LEARNING_RATE, THRESHOLD)
+    tutor.train()
 
     Examiner(tutor.get_perceptrons()).examine()
 

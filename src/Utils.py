@@ -23,6 +23,9 @@ def apply(op, l1, l2):
     """
     Returns a list of the same length as l1 and l2 where each
     index is the result of the provided operation on l1[i] & l2[i]
+    NOTE: Shadows built in function apply but since it is deprecated
+    since version 2.3 we don't care.
+    Reference: https://docs.python.org/2/library/functions.html#apply
     """
     return map(lambda tup: op(tup[0], tup[1]), zip(l1, l2))
 
