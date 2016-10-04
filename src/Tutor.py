@@ -1,4 +1,4 @@
-import math
+import random
 from Utils import mmult
 
 
@@ -16,6 +16,7 @@ class Tutor:
         err_list = []
         while not self._accurate(err_list):
             err_list = []
+            random.shuffle(self.images)
             for image in self.images:
                 for perceptron in self.perceptrons:
                     err_list.append(self._expose(image, perceptron))

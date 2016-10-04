@@ -11,7 +11,7 @@ class Perceptron:
     def __init__(self, percept_type):
         self.TYPES = {"HAPPY": 1, "SAD": 2, "MISCHIEVOUS": 3, "MAD": 4}
         self.bias = random.random()
-        self.weights = self._generate_weights(400)
+        self.weights = self._generate_weights(401)
         self.type_id = self.TYPES[percept_type]
 
     def process(self, img):
@@ -19,7 +19,7 @@ class Perceptron:
         Uses the formula sum(w[i], x[i]) from lecture notes to process an image
         :return: summed weight of inputs
         """
-        l1 = apply(float.__mul__, flatten(img.get_img()), self.weights)
+        l1 = apply(float.__mul__, img.get_img(), self.weights)
         return self._act(sum(l1))
 
     def _act(self, val):

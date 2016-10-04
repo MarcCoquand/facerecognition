@@ -8,20 +8,12 @@ class Examiner:
         self.out_strings = []
 
     def examine(self):
-        # TODO: Implement without loops
-        for image in self.test_set:
-            guess = self._expose_network(image)
-            self._append_answer(image, guess)
-        self._write_answer()
+        return map(self._make_guess, self.test_set)
 
-    def _append_answer(self, img, guess):
-        self.out_strings.append("" + img.get_id() + " " + str(guess))
+    def _format_answer(self, img, guess):
+        return "" + img.get_id() + " " + str(guess)
 
-    def _write_answer(self):
-        map(lambda line: self._print_line(line), self.out_strings)
-
-    def _expose_network(self, image):
-        # TODO: Implement without loops
+    def _make_guess(self, image):
         guess = {"type": 0, "activation": 0}
         for i in range(4):
             activation = self.perceptrons[i].process(image)
@@ -29,7 +21,22 @@ class Examiner:
                 guess["activation"] = activation
                 guess["type"] = self.perceptrons[i].get_type_id()
 
-        return guess["type"]
+        return self._format_answer(image, guess["type"])
 
-    def _print_line(self, line):
-        print line
+    def _make_guess2(self, image):
+        guess = {"type": 0, "activation": 0}
+        guess = self._expose_perceptrons(image, guess, self.perceptrons)
+        return self._format_answer(image, guess["type"])
+
+    def _expose_perceptrons(self, image, current_guess, perceptrons):
+        if not perceptrons: return current_guess
+        activation = perceptrons[0].process(image)
+        if activation > current_guess["activation"]:
+            return self._update_guess(current_guess, activation, perceptrons[0])
+        return current_guess
+
+    def _update_guess(self, guess, activation, perceptron):
+        g = guess
+        g["activation"] = activation
+        g["type"] = perceptron.get_type_id()
+        return g

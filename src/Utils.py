@@ -9,7 +9,7 @@ def mmult(m, c):
     :param c: constant
     :return: new matrix with the applied constant
     """
-    return map(lambda x: map(lambda y: y * c, x), m)
+    return map(lambda x: x * c, m)
 
 
 def msum(m):

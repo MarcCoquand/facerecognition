@@ -1,10 +1,12 @@
+import Utils
 
 class Image:
     """ Image is a utility class that takes care of necessary
         interactions with images """
 
     def __init__(self, img):
-        self.img = img
+        self.img = Utils.flatten(img)
+        img.append(1)
         self.id = None
         self.ans = None
 
@@ -22,7 +24,7 @@ class Image:
         return self.ans
 
     def set_id(self, id):
-        self.id = "Image " + str(id)
+        self.id = str(id).rstrip()
 
     def get_id(self):
         return self.id

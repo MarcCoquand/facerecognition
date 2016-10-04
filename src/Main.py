@@ -10,8 +10,12 @@ from Image import Image
 # Program arguments: training-set, answer-set, examination-set (from spec)
 EXPECTED_ARGS = 3
 Types = Enum(["HAPPY", "SAD", "MISCHIEVOUS", "MAD"])
-LEARNING_RATE = 0.001
-THRESHOLD = 30
+
+# Optimal values (derived from experiments):
+# learning_rate = 0.01
+# threshold = 15
+LEARNING_RATE = 0.01
+THRESHOLD = 15
 
 
 def parse_ans(ans_file):
@@ -21,7 +25,7 @@ def parse_ans(ans_file):
     :param ans_file: path to answer file
     :return: list of integers
     """
-    l2 = filter(lambda l: len(l) > 0, map(lambda line: get_answer(line), open(ans_file, 'r')))
+    l2 = filter(lambda l: len(l) > 0, map(get_answer, open(ans_file, 'r')))
     return flatten(l2)
 
 
@@ -37,7 +41,7 @@ def parse_img_file(image_file):
                     img_gen.append(line2)
                 else:
                     img_tmp = Image(format_img_row(img_gen))
-                    img_tmp.set_id(len(images) + 1)
+                    img_tmp.set_id(line)
                     images.append(img_tmp)
                     break
     return images
@@ -80,6 +84,18 @@ def validate_arguments():
         sys.exit(0)
 
 
+def test_correctness(arr1):
+    FACIT = "../data/FaceTest/facit-B.txt"
+    answers = parse_ans(FACIT)
+    correct = 0
+    for i in range(len(answers)):
+        print answers[i], arr1[i]
+        a = int(arr1[i][-1:])
+        if int(answers[i]) == a:
+            correct += 1
+    print "Correct guesses: %d%%" % ((float(correct)/float(len(answers)))*100)
+
+
 def main():
     validate_arguments()
     perceptrons = (Perceptron(Types.HAPPY), Perceptron(Types.SAD),
@@ -95,7 +111,8 @@ def main():
     tutor = Tutor(perceptrons, images, LEARNING_RATE, THRESHOLD)
     tutor.train()
 
-    Examiner(tutor.get_perceptrons(), test_set).examine()
+    e = Examiner(tutor.get_perceptrons(), test_set).examine()
+    test_correctness(e)
 
 if __name__ == "__main__":
     main()
