@@ -43,7 +43,7 @@
   otherkeywords={*,...},           % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
-  numberstyle=\tiny\color{gray}, % the style that is used for the line-numbers
+  numberstyle=\tiny\color{gray},   % the style that is used for the line-numbers
   rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
   showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
   showstringspaces=false,          % underline spaces within strings only
@@ -80,6 +80,41 @@ Happy, Sad, Mischievous or Mad?}
 \section{Introduction}
 \bibliographystyle{abbrv}
 \bibliography{rapport}
+
+\section {Problem description}
+
+\subsection {Perceptron Learning Algorithm}
+The program written implements an algorithm for supervised learning called
+\textit{Perceptron Learning}. \textit{Supervised Learning} is a technuque
+for machine learning where the ANN is exposed to input and produces a guess
+based on the knowledge aquired from previous guesses. Since the desired
+output from the ANN, in supervised learning, is known for every input, the
+ANN is slightly modified with each iteration to eventually produce good
+outputs for every set of inputs.
+
+The ANN in the produced program is composed by four different Perceptrons
+where each one represents one of the different facial expressions that are
+to be identified in the assignment.
+
+Each perceptron is implemented in \textit{Python} as a class composed by a
+list of \textit{401} weights that mapps to the \textit{400} pixel values
+that makes up an image. The additional weight is provided as a bias for
+the perceptron. A bias is used in order to shift the result of the activation
+function (more on that later) towards either the left or the right. I.e.
+to make the output more extreme so that it will produce a more distinct
+answer.
+
+Training of the network occurs in the \textit{Tutor class} where the provided
+set of training images is repetedly shown for each perceptron. The output
+from a perceptron, also known as \textit{activation}, is computed using
+the formula:
+
+% Make pretty math notation here plz Marc
+act(sum(xj*wj,i))
+
+where x is the input, w is the weight and act is the activation function
+which is the sigmoid function:
+sigmoid(x) = 1/(1+e^(-x))
 
 \newpage
 % This may not be the prettiest solution, but it's the one you deserve Linus
