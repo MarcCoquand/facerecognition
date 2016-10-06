@@ -9,7 +9,7 @@ def mmult(m, c):
     :param c: constant
     :return: new matrix with the applied constant
     """
-    return map(lambda x: map(lambda y: y * c, x), m)
+    return map(lambda x: x * c, m)
 
 
 def msum(m):
@@ -27,7 +27,7 @@ def apply(op, l1, l2):
     since version 2.3 we don't care.
     Reference: https://docs.python.org/2/library/functions.html#apply
     """
-    return map(lambda tup: op(tup[0], tup[1]), zip(l1, l2))
+    return map(lambda tup: op(float(tup[0]), float(tup[1])), zip(l1, l2))
 
 
 def flatten(l):

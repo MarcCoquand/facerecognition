@@ -5,13 +5,18 @@ from Utils import *
 
 class Perceptron:
     """
-        Perceptron
+    Perceptron represents a perceptron in the network. A perceptron
+    represent one of the four feelings specified in the TYPE field.
+    It reacts to an input image with a response based on it's training.
+    Attributes:
+        TYPES: mapping of the perceptron type and type id
+        weights: a list of weights that maps to image pixels
+        type_id: the type id of the perceptron
     """
 
     def __init__(self, percept_type):
         self.TYPES = {"HAPPY": 1, "SAD": 2, "MISCHIEVOUS": 3, "MAD": 4}
-        self.bias = random.random()
-        self.weights = self._generate_weights(400)
+        self.weights = self._generate_weights(401)
         self.type_id = self.TYPES[percept_type]
 
     def process(self, img):
@@ -19,7 +24,7 @@ class Perceptron:
         Uses the formula sum(w[i], x[i]) from lecture notes to process an image
         :return: summed weight of inputs
         """
-        l1 = apply(float.__mul__, flatten(img.get_img()), self.weights)
+        l1 = apply(float.__mul__, img.get_img(), self.weights)
         return self._act(sum(l1))
 
     def _act(self, val):
