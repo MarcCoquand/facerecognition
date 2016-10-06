@@ -21,7 +21,7 @@ THRESHOLD = 1
 def parse_ans(ans_file):
     """
     Opens the provided answer file and extracts the answers which are
-    returned as a list of integers.
+    returned as a list of integers. NON PURE FUNCTION!
     :param ans_file: path to answer file
     :return: list of integers
     """
@@ -30,35 +30,52 @@ def parse_ans(ans_file):
 
 
 def parse_img_file(image_file):
-    # TODO: Implement without loops
-    image = open(image_file, 'r')
-    images = []
-    for line in image:
-        if re.search('Image', line) is not None:
-            img_gen = extract_img_data(20, image)
-            for line2 in image:
-                if len(line2) != 1:
-                    img_gen.append(line2)
-                else:
-                    img_tmp = Image(format_img_row(img_gen))
-                    img_tmp.set_id(line)
-                    images.append(img_tmp)
-                    break
-    return images
+    """
+    Opens the provided image file and extracts its content into a
+    list of image objects that gets returned. NON PURE FUNCTION!
+    :return: list of image objects
+    """
+    f = open(image_file, 'r')
+    return reduce_img_file(f.readlines(), [])
 
 
-def extract_img_data(acc, i):
-    return []
+def reduce_img_file(lines, images):
+    """
+    Consumes the lines of the image file in order to extract all
+    the images and their ids. In the end it will return a list
+    of image objects.
+    :return: list om image objects
+    """
+    if not lines: return images
+    if re.search('Image', lines[0]) is not None:
+        img = Image(extract_img_data(20, lines[1:]))
+        return reduce_img_file(lines[20:], images + [img.set_id(lines[0])])
+
+    return reduce_img_file(lines[1:], images)
 
 
-def format_img_row(img):
+def extract_img_data(acc, lines):
+    """
+    Sub consumes all the lines that contains an image row and
+    returns a 2D array containing list of lists of integers
+    :param acc: int representing how many more lines to read
+    :param lines: the lines of the file
+    :return: 2D array of integers
+    """
+    if acc == 1: return [format_img_row(lines[0])[0]]
+    return [format_img_row(lines[acc-1])[0]] + extract_img_data(acc - 1, lines)
+
+
+def format_img_row(row):
     """
     format_img_row receives a row from the image file representing a pixel
     row in an image and returns it as a list of floats in [0,1)
-    :param img: image pixel row
+    :param row: image pixel row
     :return: list of integers
     """
-    return map(lambda l: map(lambda i: (float(i)/31), l), map(lambda i: i.rstrip().split(' '), img))
+    if isinstance(row, list):
+        print row
+    return map(lambda l: map(lambda i: (float(i)/31), l), map(lambda i: i.rstrip().split(' '), [row]))
 
 
 def get_answer(line):
@@ -84,34 +101,30 @@ def validate_arguments():
         sys.exit(0)
 
 
-def test_correctness(arr1):
-    # TODO: Implement without loops
-    # TODO: Facit should probbably not be a hardcoded path
-    FACIT = "../data/FaceTest/facit-B.txt"
-    answers = parse_ans(FACIT)
-    correct = 0
-    for i in range(len(answers)):
-        print arr1[i]
-        a = int(arr1[i][-1:])
-        if int(answers[i]) == a:
-            correct += 1
-    print "# Correct guesses: %d%%" % ((float(correct)/float(len(answers)))*100)
+def print_results(res_arr):
+    """
+    Expects a list with formatted answer strings that gets printed to stdout
+    """
+    if not res_arr: return
+    print res_arr[0]
+    print_results(res_arr[1:])
 
 
-# TODO: This function has to be renamed in order to comply with specification
 def main():
     validate_arguments()
     perceptrons = (Perceptron(Types.HAPPY), Perceptron(Types.SAD),
                    Perceptron(Types.MISCHIEVOUS), Perceptron(Types.MAD))
 
+    # Get content of the data files
     img_list = parse_img_file(sys.argv[1])
     ans_list = parse_ans(sys.argv[2])
     test_set = parse_img_file(sys.argv[3])
 
     # Link image and answer
     images = map(lambda ans: img_list.pop(0).set_ans(ans), ans_list)
+
     trained_p = Tutor(perceptrons, images, LEARNING_RATE, THRESHOLD).train()
-    test_correctness(Examiner(trained_p, test_set).examine())
+    print_results(Examiner(trained_p, test_set).examine())
 
 if __name__ == "__main__":
     main()

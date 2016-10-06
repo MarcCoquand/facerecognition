@@ -98,7 +98,6 @@ class Tutor:
         """
         if not err_list: return False
         mse = (sum(map(lambda x: x**2, err_list)))/2
-        print "# " + str(mse)
         return mse < self.threshold
 
     def _desired(self, img, percept):
