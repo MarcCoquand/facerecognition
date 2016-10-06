@@ -73,8 +73,6 @@ def format_img_row(row):
     :param row: image pixel row
     :return: list of integers
     """
-    if isinstance(row, list):
-        print row
     return map(lambda l: map(lambda i: (float(i)/31), l), map(lambda i: i.rstrip().split(' '), [row]))
 
 
