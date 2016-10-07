@@ -1,5 +1,5 @@
 import unittest
-from src.Main import *
+from src.faces import *
 
 TRAINING_FILE = "../data/training.txt"
 TRAINING_FILE_ANS = "../data/training-facit.txt"
