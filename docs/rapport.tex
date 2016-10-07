@@ -78,6 +78,33 @@ Happy, Sad, Mischievous or Mad?}
 
 \newpage
 \section{Introduction}
+
+This report contains the documentation and explanation of a face recognition
+program. The program can recognize if a set of drawn faces are happy, sad,
+mischievous or mad.
+
+
+\subsection{Running the program}
+
+The implementation is written in python 2.7 which means that a python 2.7 shell
+is required to run the implementation. Required program arguments are a search
+path to a \texttt{training.txt}, search path to an answer file
+\texttt{training-facit.txt} and a test file \texttt{test-file.txt}. The format
+of the training file should be the id of the image followed by the image on a
+new line. The answer file should be formatted as the image id follow by the
+correct answer (1,2,3 or 4).
+
+Should the user fail to provide the required arguments, the program will
+immediately terminate with a massage explaining that not enough input
+arguments were provided.
+
+Example usage of the program might look like:
+\begin{verbatim}
+python faces.py training-file.txt training-facit.txt test-file.txt
+\end{verbatim}
+
+
+
 \bibliographystyle{abbrv}
 \bibliography{rapport}
 
