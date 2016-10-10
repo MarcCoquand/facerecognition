@@ -110,8 +110,17 @@ python faces.py training-file.txt training-facit.txt test-file.txt
 
 \section {Problem description}
 
+The program works as such that it starts of by reading the \textit{images}. An
+image consists of it's pixels (value from 0 - white to 31 - black) and it's ID
+(sad, mischievous, happy, mad). The program then filters the noise and then
+sends the images in the \textit{Tutor} class. The tutor uses Perceptrons to
+learn what images look like (algorithm explained below). A perceptron is an
+algorithm for learning a binary classifier. Afterwards the Examiner class makes
+a guess and predicts which image belongs to which on a new set of image.
+
+
 \subsection {Perceptron Learning Algorithm}
-The program written implements an algorithm for supervised learning called
+The program implements an algorithm for supervised learning called
 \textit{Perceptron Learning}. \textit{Supervised Learning} is a technuque
 for machine learning where the ANN is exposed to input and produces a guess
 based on the knowledge aquired from previous guesses. Since the desired
