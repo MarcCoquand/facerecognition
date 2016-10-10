@@ -79,10 +79,9 @@ Happy, Sad, Mischievous or Mad?}
 \newpage
 \section{Introduction}
 
-This report contains the documentation and explanation of a face recognition
-program. The program can recognize if a set of drawn faces are happy, sad,
-mischievous or mad.
-
+This report contains the documentation for a perceptron based classification system
+that guesses the emotional state of faces presented as input. The inputs are 20
+x 20 pixel maps with 32 grey levels from white to black.
 
 \subsection{Running the program}
 
@@ -100,9 +99,9 @@ arguments were provided.
 
 Example usage of the program might look like:
 \begin{verbatim}
-python faces.py training-file.txt training-facit.txt test-file.txt
+python faces.py ../data/FaceTest/training-file.txt 
+../data/FaceTest/training-facit.txt test-file.txt
 \end{verbatim}
-
 
 
 \bibliographystyle{abbrv}
@@ -116,16 +115,18 @@ image consists of it's pixels (value from 0 - white to 31 - black) and it's ID
 sends the images in the \textit{Tutor} class. The tutor uses Perceptrons to
 learn what images look like (algorithm explained below). A perceptron is an
 algorithm for learning a binary classifier. Afterwards the Examiner class makes
-a guess and predicts which image belongs to which on a new set of image.
+a guess and predicts which image belongs to which on a new set of image. The
+program will then output the percentage of the guesses that were correct.
 
 
-\subsection {Perceptron Learning Algorithm}
+\subsection {Perceptron Learning Algorithm} 
+
 The program implements an algorithm for supervised learning called
-\textit{Perceptron Learning}. \textit{Supervised Learning} is a technuque
-for machine learning where the ANN is exposed to input and produces a guess
-based on the knowledge aquired from previous guesses. Since the desired
-output from the ANN, in supervised learning, is known for every input, the
-ANN is slightly modified with each iteration to eventually produce good
+\textit{Perceptron Learning}. \textit{Supervised Learning} is a technuque for
+machine learning where the Artificial neural network is exposed to input and
+produces a guess based on the knowledge aquired from previous guesses. Since the
+desired output from the ANN, in supervised learning, is known for every input,
+the ANN is slightly modified with each iteration to eventually produce good
 outputs for every set of inputs.
 
 The ANN in the produced program is composed by four different Perceptrons
@@ -159,8 +160,8 @@ sigmoid(x) = 1/(1+e^{-x})
 
 
 The difference between the expected output and the actual output is the
-error \textit{e}. The error e is then multiplied with the learning rate \alpha
-and the pixel matrix to produce the gradient \textit{\nabla W}. This
+error $e$. The error e is then multiplied with the learning rate $\alpha$
+and the pixel matrix to produce the gradient $\nabla w$. This
 gradient is then added to every weight in the internal weight matrix for each
 perceptron. This course of events can be described using the bellow formulas:
 
@@ -189,7 +190,7 @@ this function gets below a predefined level. The function used in the current
 implementation is:
 
 \begin{equation*}
-  E = \frac^1_2(\sum^p_{i=1} \norm{y^{(i)} - d^{(i)}}^2
+  E = \frac{1}{2}\sum^p_{i=1} ||y^{(i)} - d^{(i)}||^2
 \end{equation*}
 
 Where $p$ is the number of input/output vector pairs in the training set.
@@ -200,9 +201,25 @@ the set of test images. Each image is shown to every perceptron in the
 network and the activation for each perceptron is recorded. The largest
 activation is chosen as the answer for the network and is recorded into
 our list of answers. When every image in the test set has been classified
-the answers are printed to \textit{stdout}
+the answers are printed to \textit{stdout}.
+
+\section{Concluding discussion}
+
+The biggest difficulty was choosing which programming language to use.
+It was difficult choosing between Haskell and Python. Ultimately we chose
+Python as our knowledge in Haskell was not sufficient to write this program.
+It would be interesting to implement more AI and more specifically in machine
+learning programs in a functional programming language as it's easier to deal with
+concurrency. If you wanted to scale this program and have a larger neural
+network it might be necessary to add concurrency.
 
 \newpage
 % This may not be the prettiest solution, but it's the one you deserve Linus
-%\lstinputlisting[language=Python]{../src/given.py}
+\lstinputlisting[language=Python]{../src/faces.py}
+\lstinputlisting[language=Python]{../src/Enum.py}
+\lstinputlisting[language=Python]{../src/Examiner.py}
+\lstinputlisting[language=Python]{../src/Image.py}
+\lstinputlisting[language=Python]{../src/Perceptron.py}
+\lstinputlisting[language=Python]{../src/Tutor.py}
+\lstinputlisting[language=Python]{../src/Utils.py}
 \end{document}
