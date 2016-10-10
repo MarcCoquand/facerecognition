@@ -140,7 +140,7 @@ function (more on that later) towards either the left or the right. I.e.
 to make the output more extreme so that it will produce a more distinct
 answer.
 
-Training of the network occurs in the \textit{Tutor class} where the provided
+Training in the network occurs in the \textit{Tutor} class where the provided
 set of training images is repetedly shown for each perceptron. The output
 from a perceptron, also known as \textit{activation}, is computed using
 the formula:
@@ -150,19 +150,57 @@ the formula:
   a_i = act(\sum_j x_j*w_{j,i})
 \end{equation*}
 
-where x is the input, w is the weight and act is the activation function
+where x is the input, w is the weight and act is the activation function,
 which is the sigmoid function:
 
 \begin{equation*}
 sigmoid(x) = 1/(1+e^{-x})
 \end{equation*}
 
+
+The difference between the expected output and the actual output is the
+error \textit{e}. The error e is then multiplied with the learning rate \alpha
+and the pixel matrix to produce the gradient \textit{\nabla W}. This
+gradient is then added to every weight in the internal weight matrix for each
+perceptron. This course of events can be described using the bellow formulas:
+
 \begin{align*}
   &e_i = y_i - a_i\\
   &\nabla w_{j,i} = \alpha e_ix_j\\
   &w_{j,i} \leftarrow w_{j,i} + \nabla w_{j,i}
 \end{align*}
-  
+
+This process is repeated for the entire set of training images, however,
+only performing this process once would not produce very good results and
+therefore, when the network has used all the training data, the images
+are shuffled and the entire process described above is repeated.
+
+The main problem encountered while training an ANN is finding the fine line
+right before the network gets overfitted. When the ANN gets overfitted, it
+becomes too specialized on the training data which will render it useless
+when exposed to previously unseen data. It is, however, still crucial
+to train the ANN as close to this limit as possible in order in order for
+it to be able to make generalizations to the data and produce decent output.
+
+One way of determine when the network has reached the desired level of training
+is, for each iteration of the training data set, use a formula to compute the
+sum of the output errors for the network and end training when the value from
+this function gets below a predefined level. The function used in the current
+implementation is:
+
+\begin{equation*}
+  E = \frac^1_2(\sum^p_{i=1} \norm{y^{(i)} - d^{(i)}}^2
+\end{equation*}
+
+Where $p$ is the number of input/output vector pairs in the training set.
+
+When the threshold for the error is reached, the perceptrons is deemed ready
+to passed on to the \textit{Examiner} class where the network is exposed to
+the set of test images. Each image is shown to every perceptron in the
+network and the activation for each perceptron is recorded. The largest
+activation is chosen as the answer for the network and is recorded into
+our list of answers. When every image in the test set has been classified
+the answers are printed to \textit{stdout}
 
 \newpage
 % This may not be the prettiest solution, but it's the one you deserve Linus
