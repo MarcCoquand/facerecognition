@@ -6,13 +6,14 @@ import Data.Char
 import Data.List.Split
 
 -- ------------------------------------------------------------------------------
--- | TYPE DEFINITIONS 
+-- | TYPE DEFINITIONS AND GLOBALS
 
--- | Perceptron consist of id from 1-4 and it's weights
+type Ans  = Integer
+type Pix  = [Integer]
+type Img  = [(Pix, Ans)]
+
+--   Perceptron consist of id from 1-4 and it's weights
 type Perceptron = (Integer, [Integer])
-type Ans        = Integer
-type Pix        = [Integer]
-type Img        = [(Pix, Ans)]
 
 -- ------------------------------------------------------------------------------
 -- | PERCEPTRON
@@ -45,10 +46,46 @@ computeAct :: Float -> Float
 computeAct f = 1/(1 + exp (f))
 
 -- ------------------------------------------------------------------------------
--- | EXAMINER
+-- | TUTOR
 
-examine :: (Img -> String) -> Img -> [String]
-examine f = map f Img
+{-train :: [Perceptron] -> img -> [Perceptron]-}
+
+-- | Calculate mean square error and check if less than a threshold t, suggested
+--   threshold is 0.01
+accurate :: [Float] -> Float -> Bool
+accurate [] _ = False 
+accurate f t  = mse < t 
+								where
+								mse = (sum (map (\x -> x**2) f))/2 
+
+desired :: (Pix, Ans) -> Perceptron -> Integer
+desired i p = if (snd i) == (fst p) then 1 else 0
+
+deltaWeight :: Pix -> Float -> Float -> [Float]
+deltaWeight [] _ _ = []
+deltaWeight p l f = map (\x -> x*l*f) p 
+
+-- ------------------------------------------------------------------------------
+-- | EXAMINER
+-- | Examiner is a class that, provided a set of trained neurons and
+-- | test images, examines the training results of the network
+
+examine :: Img -> ((Pix, Ans) -> String) -> [String]
+examine [] _     = []
+examine (i:is) f = f i:examine is f
+
+-- | Shows an image to all of the perceptrons and returns the largest
+--   activation from the network. 
+exposeP :: [Perceptron] -> Img -> Integer -> Integer
+exposeP [] _ i = i
+exposeP (p:ps) i c  = let
+				proc = process p i
+				new = if c>proc then c else (fst p)
+				in exposeP ps i new
+
+formatOutput :: Integer ->  Integer -> String
+formatOutput img guess = "Gussing: " ++ show guess ++ ". Right answer: " ++ 
+													show img
 
 -- ------------------------------------------------------------------------------
 -- | IMAGE
