@@ -24,13 +24,13 @@ type Perceptron = (Integer, [Integer])
 -- | Process the image with a perceptron
 process :: Perceptron -> Img -> Integer
 process _ []      = 0
-process (_,[]) _	= 0
+process (_,[]) _  = 0
 process p i = sum (map sum (q p i))
-				where
-				q :: Perceptron -> Img -> [[Integer]]
-				q _ []		 = []
-				q (_,[]) _ = []
-				q p (i:is) = ((zipWith (*) (fst i) (snd p))):(q p is)
+        where
+        q :: Perceptron -> Img -> [[Integer]]
+        q _ []     = []
+        q (_,[]) _ = []
+        q p (i:is) = ((zipWith (*) (fst i) (snd p))):(q p is)
 
 
 -- | Generate weights of length l
@@ -55,8 +55,8 @@ computeAct f = 1/(1 + exp (f))
 accurate :: [Float] -> Float -> Bool
 accurate [] _ = False 
 accurate f t  = mse < t 
-								where
-								mse = (sum (map (\x -> x**2) f))/2 
+                where
+                mse = (sum (map (\x -> x**2) f))/2 
 
 desired :: (Pix, Ans) -> Perceptron -> Integer
 desired i p = if (snd i) == (fst p) then 1 else 0
@@ -79,13 +79,13 @@ examine (i:is) f = f i:examine is f
 exposeP :: [Perceptron] -> Img -> Integer -> Integer
 exposeP [] _ i = i
 exposeP (p:ps) i c  = let
-				proc = process p i
-				new = if c>proc then c else (fst p)
-				in exposeP ps i new
+                      proc = process p i
+                      new = if c>proc then c else (fst p)
+                      in exposeP ps i new
 
 formatOutput :: Integer ->  Integer -> String
 formatOutput img guess = "Gussing: " ++ show guess ++ ". Right answer: " ++ 
-													show img
+                          show img
 
 -- ------------------------------------------------------------------------------
 -- | IMAGE
@@ -128,12 +128,12 @@ pAns (s@(ms:_):as)
 main :: IO ()
 main = do 
   [p,a] <- getArgs
-  pF <- readFile p
-  pA <- readFile a
-  seed <- newStdGen
-	-- | Read both files and parse them, create a list of img, I.e. a face matching
-	--   an answer
+  pF    <- readFile p
+  pA    <- readFile a
+  seed  <- newStdGen
+  -- | Read both files and parse them, create a list of img, I.e. a face matching
+  --   an answer
   let i  = zip (map concat (filter (not . null)  
-								(map (map toIntL) (fAux [] [] (lines pF))))) (pAns (lines pA))
+                 (map (map toIntL) (fAux [] [] (lines pF))))) (pAns (lines pA))
       iF = noiseF i
   putStrLn pF
